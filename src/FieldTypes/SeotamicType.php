@@ -8,6 +8,7 @@ use Statamic\Entries\Entry;
 use Cnj\Seotamic\File\File;
 use Statamic\Fields\Fieldtype;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
 
 abstract class SeotamicType extends Fieldtype
 {
@@ -71,6 +72,9 @@ abstract class SeotamicType extends Fieldtype
 
         // We make sure all the keys are present in the data
         $config = array_replace_recursive($this->defaultGlobalData(), $config);
+
+        // make the social_image path absolute
+        if($config['social_image']) $config['social_image'] = Storage::disk(config('seotamic.container'))->url($config['social_image']);
 
         return $config;
     }

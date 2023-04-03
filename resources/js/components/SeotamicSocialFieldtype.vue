@@ -51,11 +51,11 @@
       :permalink="meta.permalink"
       :domain="meta.seotamic.preview_domain"
       :title="value.title.value"
-      :image="socialPreviewImage"
+      :image="meta.social_image"
+      :fallback="meta.seotamic.social_image"
       :description="value.description.value"
     />
 
-    <div class="seotamic-mt-8 seotamic-h-px seotamic-bg-gray-300"></div>
   </div>
 </template>
 
@@ -88,16 +88,6 @@ export default {
         { label: this.meta.t.label_custom, value: "custom" },
       ],
     };
-  },
-
-  computed: {
-    socialPreviewImage() {
-      if (this.meta.social_image) {
-        return `/${this.meta.config.container}/${this.meta.social_image}`;
-      }
-
-      return `/${this.meta.config.container}/${this.meta.seotamic.social_image}`;
-    },
   },
 
   watch: {

@@ -4,6 +4,7 @@ namespace Cnj\Seotamic\FieldTypes;
 
 use Statamic\Facades\Asset;
 use Statamic\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class SeotamicSocial extends SeotamicType
 {
@@ -68,7 +69,8 @@ class SeotamicSocial extends SeotamicType
     {
         if (get_class($this->field->parent()) === "Statamic\Entries\Entry") {
             $meta = $this->field->parent()->value('seotamic_meta');
-            $social_image = $this->field->parent()->value('seotamic_image');
+            $social_image_path = $this->field->parent()->value('seotamic_image');
+            $social_image = isset($social_image_path) ? Storage::disk(config('seotamic.container'))->url($social_image_path) : '';
         }
 
         // If the parent is a collection, we use defaults/empty values
@@ -122,7 +124,7 @@ class SeotamicSocial extends SeotamicType
         $title = $this->getTitle();
         $seotamic = $this->getSeotamicGlobals();
         $meta = $this->field->parent()->data()->get('seotamic_meta');
-        $compress  = array_key_exists('social_image_compress', $seotamic) ? $seotamic['social_image_compress'] : true;
+        $compress = array_key_exists('social_image_compress', $seotamic) ? $seotamic['social_image_compress'] : true;
         $social_image = $this->getImage($compress);
 
         $output = [
@@ -131,7 +133,7 @@ class SeotamicSocial extends SeotamicType
             'site_name' => array_key_exists('social_site_name', $seotamic) ? $seotamic['social_site_name'] : "",
             'title' => $title,
             'description' => array_key_exists('social_description', $seotamic) ? $seotamic['social_description'] : "",
-            'image' =>  $social_image
+            'image' => $social_image
         ];
 
         if (isset($value['title']) && isset($value['title']['value'])) {
@@ -187,6 +189,6 @@ class SeotamicSocial extends SeotamicType
             return url(Image::manipulate($asset, ['w' => 1200, 'h' => 630, 'q' => '70', 'fit' => 'crop']));
         }
 
-        return url($asset);
+        return Storage::disk(config('seotamic.container'))->url($asset);
     }
 }

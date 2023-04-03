@@ -7,16 +7,6 @@
       {{ previewTitle }}
     </div>
 
-    <div v-if="permalink" class="seotamic-mt-2">
-      <a
-        :href="`https://developers.facebook.com/tools/debug/?q=` + permalink"
-        class="text-sm underline text-blue hover:text-blue-dark"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Facebook Debugger
-      </a>
-    </div>
 
     <div
       class="seotamic-mt-2 seotamic-bg-[#f2f3f5] seotamic-border seotamic-border-[#dadde1] seotamic-shadow-sm seotamic-flex seotamic-flex-col seotamic-max-w-[500px] seotamic-rounded-[3px]"
@@ -25,8 +15,8 @@
         class="seotamic-h-[261px] seotamic-w-full seotamic-bg-blue-300 relative"
       >
         <img
-          v-if="image"
-          :src="image"
+          v-if="image || fallback"
+          :src="image || fallback"
           class="absolute object-cover w-full h-full"
         />
       </div>
@@ -50,6 +40,18 @@
         </div>
       </div>
     </div>
+
+    <div v-if="permalink" class="seotamic-mt-2">
+      <a
+        :href="`https://developers.facebook.com/tools/debug/?q=` + permalink"
+        class="text-sm underline text-blue hover:text-blue-dark"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Facebook Debugger
+      </a>
+    </div>
+
   </div>
 </template>
 
@@ -72,6 +74,11 @@ export default {
       default: "",
     },
     image: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    fallback: {
       type: String,
       required: true,
       default: "",
